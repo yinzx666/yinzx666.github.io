@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        centos安装informix｜undefined
+        centos安装informix｜Zyy&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/2018/08/27/informix/">
+    <link rel="canonical" href="http://yoursite.com/2018/09/02/informix/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -142,7 +142,7 @@
                     <span class="meta">
                          作者 zyy
                         <span>
-                          日期 2018-08-27
+                          日期 2018-09-02
                          </span>
                     </span>
                     <div class="tags text-center">
@@ -165,9 +165,9 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>本文章讲的是centos6.7 32位系统安装informix7.31的过程，还有java jdbc连接informix增删改查</p>
+                <p>本文章讲的是centos6.7 32位系统安装informix7.31的过程</p>
 <h2 id="centos6-7-32位虚拟机"><a href="#centos6-7-32位虚拟机" class="headerlink" title="centos6.7 32位虚拟机"></a>centos6.7 32位虚拟机</h2><p>虚拟机镜像文件进入<a href="http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-Everything-1804.iso" target="_blank" rel="noopener">官网下载</a><br>傻瓜式安装，不用配置什么东西，简单使用即可</p>
-<h2 id="informix安装"><a href="#informix安装" class="headerlink" title="informix安装"></a>informix安装</h2><h3 id="创建用户和组"><a href="#创建用户和组" class="headerlink" title="创建用户和组"></a>创建用户和组</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$ groupadd  informix;</span><br><span class="line"></span><br><span class="line">$ useradd -g informix -d /opt/informix -m informix;</span><br><span class="line"></span><br><span class="line">$ passwd informix;</span><br><span class="line"></span><br><span class="line">$ chmod 755 /opt/informix;</span><br></pre></td></tr></table></figure>
+<h2 id="informix安装"><a href="#informix安装" class="headerlink" title="informix安装"></a>informix安装</h2><h3 id="创建用户和组"><a href="#创建用户和组" class="headerlink" title="创建用户和组"></a>创建用户和组</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ groupadd  informix;</span><br><span class="line"></span><br><span class="line">$ useradd -g informix -d /opt/informix -m informix;</span><br><span class="line"></span><br><span class="line">$ passwd informix;</span><br><span class="line"></span><br><span class="line">$ chmod 755 /opt/informix;</span><br></pre></td></tr></table></figure>
 <h3 id="创建数据库安装目录"><a href="#创建数据库安装目录" class="headerlink" title="创建数据库安装目录"></a>创建数据库安装目录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir /dbs;</span><br><span class="line"></span><br><span class="line">$ chown  informix:informix /dbs;</span><br><span class="line"></span><br><span class="line">$ chmod 660 /dbs;</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">cd</span> /dbs;</span><br><span class="line"></span><br><span class="line">$ touch rootdbs;</span><br><span class="line"></span><br><span class="line">$ chown  informix:informix rootdbs;</span><br><span class="line"></span><br><span class="line">$ chmod 660 rootdbs;</span><br></pre></td></tr></table></figure>
 <h3 id="准备informix环境变量"><a href="#准备informix环境变量" class="headerlink" title="准备informix环境变量"></a>准备informix环境变量</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/profile</span><br><span class="line">将以下部分放置最底部</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> INFORMIXSERVER=ifxserver</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> INFORMIXDIR=/opt/informix</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> ONCONFIG=onconfig.ifxserver</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> INFORMIXSQLHOSTS=<span class="variable">$INFORMIXDIR</span>/etc/sqlhosts.ifxserver</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$INFORMIXDIR</span>/bin:/usr/bin:<span class="variable">$&#123;PATH&#125;</span>:.</span><br><span class="line"></span><br><span class="line">保存</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">source</span> /etc/profile</span><br><span class="line">使配置生效</span><br></pre></td></tr></table></figure>
 <h3 id="数据库安装"><a href="#数据库安装" class="headerlink" title="数据库安装"></a>数据库安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">我下载的是rpm包</span><br><span class="line">$ rpm -ivh IDS.rpm</span><br><span class="line"></span><br><span class="line">中间需要输入序列号和序列码</span><br><span class="line">第一次输入：AAC<span class="comment">#J821478</span></span><br><span class="line">第二次输入：GBLNJF</span><br></pre></td></tr></table></figure>
